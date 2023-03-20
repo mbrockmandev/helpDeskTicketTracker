@@ -9,6 +9,8 @@ const {
 } = require('../controllers/ticketController');
 
 const { protectRoute } = require('../middleware/authMiddleware');
+const noteRouter = require('./noteRoutes');
+router.use('/:ticketId/notes', noteRouter);
 
 router
   .route('/')
