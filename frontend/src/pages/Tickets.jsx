@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { getTickets, reset } from '../features/tickets/ticketSlice';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
+import TicketItem from '../components/TicketItem';
 
-const Tickets = () => {
+function Tickets() {
   const { tickets, isLoading, isSuccess } = useSelector(
     (state) => state.tickets,
   );
@@ -23,7 +24,27 @@ const Tickets = () => {
 
   if (isLoading) return <Spinner />;
 
-  return <div>Tickets</div>;
-};
+  return (
+    <>
+      <BackButton url='/' />
+      <h1>Tickets</h1>
+      <div className='tickets'>
+        <div className='ticket-headings'>
+          <div>Date</div>
+          <div>Product</div>
+          <div>Status</div>
+        </div>
+        {tickets.map((ticket) => {
+          return (
+            <TicketItem
+              key={ticket._id}
+              ticket={ticket}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+}
 
 export default Tickets;

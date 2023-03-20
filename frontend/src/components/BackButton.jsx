@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FaArrowCircleLeft } from 'react-icons/fa';
 
-const BackButton = ({ url }) => {
+function BackButton({ url }) {
   return (
     <Link
       to={url}
@@ -9,6 +9,6 @@ const BackButton = ({ url }) => {
       <FaArrowCircleLeft />
     </Link>
   );
-};
+}
 
 export default BackButton;
