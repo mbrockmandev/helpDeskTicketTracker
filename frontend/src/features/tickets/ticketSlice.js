@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import ticketService from './ticketService';
+import { extractErrorMessage } from '../../utils';
 
 const initialState = {
   tickets: [],
@@ -18,11 +19,7 @@ export const createTicket = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
       return await ticketService.createTicket(ticketData, token);
     } catch (e) {
-      const message =
-        (e.response && e.response.data && e.response.data.message) ||
-        e.message ||
-        e.toString();
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(extractErrorMessage(e));
     }
   },
 );
@@ -35,11 +32,7 @@ export const getTickets = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
       return await ticketService.getTickets(token);
     } catch (e) {
-      const message =
-        (e.response && e.response.data && e.response.data.message) ||
-        e.message ||
-        e.toString();
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(extractErrorMessage(e));
     }
   },
 );
@@ -52,11 +45,7 @@ export const getTicketDetails = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
       return await ticketService.getTicketDetails(ticketId, token);
     } catch (e) {
-      const message =
-        (e.response && e.response.data && e.response.data.message) ||
-        e.message ||
-        e.toString();
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(extractErrorMessage(e));
     }
   },
 );
