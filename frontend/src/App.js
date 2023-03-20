@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import NewTicket from './pages/NewTicket';
 import Register from './pages/Register';
+import Tickets from './pages/Tickets';
 
 function App() {
   return (
@@ -33,6 +34,14 @@ function App() {
               <Route
                 path='/new-ticket'
                 element={<NewTicket />}
+              />
+            </Route>
+            <Route
+              path='/tickets'
+              element={<PrivateRoute />}>
+              <Route
+                path='/tickets'
+                element={<Tickets />}
               />
             </Route>
           </Routes>
