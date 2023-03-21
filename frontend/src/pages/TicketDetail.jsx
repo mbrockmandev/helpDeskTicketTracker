@@ -7,7 +7,7 @@ import {
   closeTicket,
   reset,
 } from '../features/tickets/ticketSlice';
-import { getNotes, addNote } from '../features/notes/noteSlice';
+import { getNotes, createNote } from '../features/notes/noteSlice';
 import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
 import BackButton from '../components/BackButton';
@@ -32,11 +32,8 @@ Modal.setAppElement('#root');
 function TicketDetail() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [noteText, setNoteText] = useState('');
-  const { ticket, ticketIsLoading, isSuccess, isError, message } = useSelector(
-    (state) => state.tickets,
-  );
-
-  const { notes, notesAreLoading } = useSelector((state) => state.notes);
+  const { ticket } = useSelector((state) => state.tickets);
+  const { notes } = useSelector((state) => state.notes);
 
   const params = useParams();
   const ticketId = params.id;
@@ -44,13 +41,10 @@ function TicketDetail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-
-    dispatch(getTicketDetails(ticketId));
+    dispatch(getTicketDetails(ticketId)).unwrap().catch(toast.error);
+    dispatch(getNotes(ticketId)).unwrap().catch(toast.error);
     // eslint-disable-next-line
-  }, [isError, ticketId, message, notes]);
+  }, [ticketId, dispatch]);
 
   const onTicketClose = () => {
     dispatch(closeTicket(ticketId));
@@ -60,16 +54,14 @@ function TicketDetail() {
 
   const onNoteSubmit = (e) => {
     e.preventDefault();
-    console.log(`${noteText}`);
+    dispatch(createNote({ noteText, ticketId }));
     closeModal();
   };
   // open/close modal
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
 
-  if (ticketIsLoading || notesAreLoading) return <Spinner />;
-
-  if (isError) return <h3>Something went wrong!</h3>;
+  if (!ticket) return <Spinner />;
 
   return (
     <div className='ticket-page'>
@@ -133,12 +125,16 @@ function TicketDetail() {
         </form>
       </Modal>
 
-      {notes.map((note) => (
-        <NoteItem
-          key={note._id}
-          note={note}
-        />
-      ))}
+      {notes ? (
+        notes.map((note) => (
+          <NoteItem
+            key={note._id}
+            note={note}
+          />
+        ))
+      ) : (
+        <Spinner />
+      )}
 
       {ticket.status !== 'closed' && (
         <button

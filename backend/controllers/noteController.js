@@ -16,7 +16,6 @@ const getNotes = asyncHandler(async (req, res) => {
   }
 
   const notes = await Note.find({ ticket: req.params.ticketId });
-  console.log('notes:', notes);
 
   res.status(200).json(notes);
 });

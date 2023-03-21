@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const API_URL = '/api/tickets/';
 
+// Get ticket notes
 const getNotes = async (ticketId, token) => {
   const config = {
     headers: {
@@ -14,7 +15,8 @@ const getNotes = async (ticketId, token) => {
   return response.data;
 };
 
-const addNote = async (ticketId, noteData, token) => {
+// Create ticket note
+const createNote = async (noteText, ticketId, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -23,7 +25,9 @@ const addNote = async (ticketId, noteData, token) => {
 
   const response = await axios.post(
     API_URL + ticketId + '/notes',
-    { text: noteData },
+    {
+      text: noteText,
+    },
     config,
   );
 
@@ -32,7 +36,7 @@ const addNote = async (ticketId, noteData, token) => {
 
 const noteService = {
   getNotes,
-  addNote,
+  createNote,
 };
 
 export default noteService;

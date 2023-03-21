@@ -7,14 +7,14 @@ const noteSchema = mongoose.Schema(
       required: true,
       ref: 'User',
     },
-    user: {
+    ticket: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'Ticket',
     },
     text: {
       type: String,
-      required: [true, 'Please add some text.'],
+      required: [true, 'Please add some text'],
     },
     isStaff: {
       type: Boolean,
